@@ -48,16 +48,18 @@
 
         var floor = game.add.sprite(0, 350, "red");
         floor.width = window.innerWidth;
+        floor.body.immovable = true;
         walls.add(floor);
         
         var ceiling = game.add.sprite(0, 0, "red");
         ceiling.width = window.innerWidth;
+        ceiling.body.immovable = true;
         walls.add(ceiling);
       }
 
       function update() {
-        player.body.gravity.x = gravity.gamma;
-        player.body.gravity.y = gravity.beta;
+        player.body.gravity.x = gravity.gamma * 2;
+        player.body.gravity.y = gravity.beta * 2;
 
         game.physics.arcade.collide(player, walls);
       }
