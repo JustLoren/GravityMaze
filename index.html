@@ -26,6 +26,7 @@
       var player;
       var walls;
       var jumptimer = 0;
+      var jumpEffects;
 
       function preload() {
 
@@ -66,6 +67,8 @@
         rightWall.height = 350;
         walls.add(rightWall);
         rightWall.body.immovable = true;
+
+        jumpEffects = {};
       }
 
       function update() {
@@ -78,19 +81,37 @@
         game.physics.arcade.collide(player, walls);
 
         if (game.input.activePointer.isDown && !player.body.touching.none) {   //player is on the ground, so he is allowed to start a jump
+
           jumptimer = game.time.time;
-          player.body.gravity.x = -player.body.gravity.x;
-          player.body.gravity.y = -player.body.gravity.y;
+          jumpEffects = { x: undefined, y: undefined };
+
+          if (player.body.touching.down)
+            jumpEffects.y = -900;
+
+          else if (player.body.touching.up)
+            jumpEffects.y = 900;
+
+          if (player.body.touching.left)
+            jumpEffects.x = 900;
+
+          else if (player.body.touching.right)
+            jumpEffects.x = -900;
+
         } else if (game.input.activePointer.isDown && (jumptimer != 0)) { //player is no longer on the ground, but is still holding the jump key
           if (game.time.time - jumptimer > 600) { // player has been holding jump for over 600 millliseconds, it's time to stop him
             jumptimer = 0;
-          } else { // player is allowed to jump higher, not yet 600 milliseconds of jumping
-            player.body.gravity.x = -player.body.gravity.x * 2;
-            player.body.gravity.y = -player.body.gravity.y * 2;
+            jumpEffects = {};
           }
         } else if (jumptimer != 0) { //reset jumptimer since the player is no longer holding the jump key
           jumptimer = 0;
-        }        
+          jumpEffects = {};
+        }
+
+        if (jumpEffects.x)
+          player.body.gravity.x = jumpEffects.x;
+
+        if (jumpEffects.y)
+          player.body.gravity.y = jumpEffects.y;
       }
 
     };
