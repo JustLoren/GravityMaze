@@ -69,11 +69,11 @@
       }
 
       function update() {
-        //player.body.gravity.x = gravity.gamma * 2;
-        //player.body.gravity.y = gravity.beta * 2;
+        player.body.gravity.x = gravity.gamma * 10;
+        player.body.gravity.y = gravity.beta * 10;
 
-        player.body.gravity.x = 0 * 10;
-        player.body.gravity.y = 90 * 10;
+        //player.body.gravity.x = 0 * 10;
+        //player.body.gravity.y = 90 * 10;
 
         game.physics.arcade.collide(player, walls);
 
