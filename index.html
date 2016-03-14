@@ -25,6 +25,7 @@
       var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update });
       var player;
       var walls;
+      var jumptimer = 0;
 
       function preload() {
 
@@ -39,8 +40,8 @@
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         player = game.add.sprite(250, 250, "green");
-        game.physics.arcade.enable(player);       
-
+        game.physics.arcade.enable(player);
+        
         player.body.collideWorldBounds = true;
 
         walls = game.add.group();
@@ -68,10 +69,28 @@
       }
 
       function update() {
-        player.body.gravity.x = gravity.gamma * 2;
-        player.body.gravity.y = gravity.beta * 2;
+        player.body.gravity.x = gravity.gamma * 10;
+        player.body.gravity.y = gravity.beta * 10;
+
+        //player.body.gravity.x = 0 * 10;
+        //player.body.gravity.y = 90 * 10;
 
         game.physics.arcade.collide(player, walls);
+
+        if (game.input.activePointer.isDown && !player.body.touching.none) {   //player is on the ground, so he is allowed to start a jump
+          jumptimer = game.time.time;
+          player.body.gravity.x = -player.body.gravity.x;
+          player.body.gravity.y = -player.body.gravity.y;
+        } else if (game.input.activePointer.isDown && (jumptimer != 0)) { //player is no longer on the ground, but is still holding the jump key
+          if (game.time.time - jumptimer > 600) { // player has been holding jump for over 600 millliseconds, it's time to stop him
+            jumptimer = 0;
+          } else { // player is allowed to jump higher, not yet 600 milliseconds of jumping
+            player.body.gravity.x = -player.body.gravity.x * 2;
+            player.body.gravity.y = -player.body.gravity.y * 2;
+          }
+        } else if (jumptimer != 0) { //reset jumptimer since the player is no longer holding the jump key
+          jumptimer = 0;
+        }        
       }
 
     };
