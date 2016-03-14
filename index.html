@@ -48,13 +48,23 @@
 
         var floor = game.add.sprite(0, 350, "red");
         floor.width = window.innerWidth;
-        floor.body.immovable = true;
         walls.add(floor);
+        floor.body.immovable = true;
         
         var ceiling = game.add.sprite(0, 0, "red");
         ceiling.width = window.innerWidth;
-        ceiling.body.immovable = true;
         walls.add(ceiling);
+        ceiling.body.immovable = true;
+
+        var leftWall = game.add.sprite(0, 0, "red");
+        leftWall.height = 350;
+        walls.add(leftWall);
+        leftWall.body.immovable = true;
+
+        var rightWall = game.add.sprite(window.innerWidth - 32, 0, "red");
+        rightWall.height = 350;
+        walls.add(rightWall);
+        rightWall.body.immovable = true;
       }
 
       function update() {
